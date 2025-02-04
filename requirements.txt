@@ -1,0 +1,4 @@
+opencv-python
+python-dotenv
+pywhatkit
+pywin32
