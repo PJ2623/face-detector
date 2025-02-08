@@ -5,6 +5,7 @@ This project is an **intruder detection system** that uses **OpenCV** and an **I
 ---
 
 ## 🛠️ Features
+
 - 📷 **IP Webcam Integration** – Captures video feed from an Android phone running [IP Webcam](https://play.google.com/store/apps/details?id=com.pas.webcam).
 - 🧠 **Face Detection** – Uses OpenCV's Haar Cascade classifier.
 - ☁️ **Cloudinary Upload** – Captured images are uploaded to Cloudinary for secure storage.
@@ -15,6 +16,7 @@ This project is an **intruder detection system** that uses **OpenCV** and an **I
 ---
 
 ## 📸 How It Works
+
 1. **Start the IP Webcam App** on your Android device.
 2. Note the **IP Address & Port** shown (e.g., `http://192.168.1.100:8080`).
 3. Set the **WEB_CAM_URL** in your `.env` file.
@@ -30,6 +32,7 @@ This project is an **intruder detection system** that uses **OpenCV** and an **I
 ## 📦 Installation & Setup
 
 ### 🔧 Prerequisites
+
 - **Python 3.x** installed
 - An **Android phone** with [IP Webcam](https://play.google.com/store/apps/details?id=com.pas.webcam)
 - Accounts for:
@@ -38,7 +41,9 @@ This project is an **intruder detection system** that uses **OpenCV** and an **I
   - An **SMTP email provider** (e.g., Yahoo, Gmail)
 
 ### 🛠️ Installation
+
 1. **Clone the repository**:
+
    ```sh
    git clone https://github.com/your-username/intruder-detection.git
    cd intruder-detection
