@@ -1,22 +1,44 @@
+# Intruder Detection & Notification System 🚨
 
-# Security Monitoring System
-
-### Project Overview
-This project is designed to detect faces using a webcam, and send alerts via email and WhatsApp when an intruder is detected. The system captures a snapshot of the scene, attaches the image, and sends it to the specified recipient through both email and WhatsApp. The system uses OpenCV for face detection and pywhatkit for sending WhatsApp messages.
-
-### Features
-- Real-time Face Detection: Uses the webcam to detect faces in the video feed.
-- Security Alerts: Sends an email with the detected face image when an intruder is detected.
-- WhatsApp Notifications: Sends a WhatsApp message with the image as an attachment.
-- Email Configuration: The email is sent using the Yahoo SMTP server with SSL encryption for secure communication.
-- Environment Configuration: Uses a .env file to store sensitive information, such as email credentials and phone numbers.
-### Technologies Used
-- OpenCV: For real-time face detection from the webcam feed.
-- smtplib: For sending emails via Yahoo's SMTP server.
-- pywhatkit: For sending WhatsApp messages.
-- dotenv: To load environment variables from a .env file.
-
-# Conclusion
-This system provides a basic but effective way to detect intruders in real-time using face detection. It sends security alerts to your email and WhatsApp with an image attachment when a face is detected. The system can be easily extended with additional features such as motion detection, multiple recipient support, or cloud storage integration for saving captured images.
+This project is an **intruder detection system** that uses **OpenCV** and an **IP Webcam** to detect faces and send **WhatsApp alerts** with an image of the intruder. The captured image is uploaded to **Cloudinary**, and the system prevents duplicate alerts by resetting after a set time.
 
 ---
+
+## 🛠️ Features
+- 📷 **IP Webcam Integration** – Captures video feed from an Android phone running [IP Webcam](https://play.google.com/store/apps/details?id=com.pas.webcam).
+- 🧠 **Face Detection** – Uses OpenCV's Haar Cascade classifier.
+- ☁️ **Cloudinary Upload** – Captured images are uploaded to Cloudinary for secure storage.
+- 📩 **WhatsApp & Email Alerts** – Alerts are sent via **Twilio WhatsApp API** and email.
+- 🛑 **Duplicate Alert Prevention** – Sends only **one alert per detection** and resets after **10 seconds** of no detection.
+- 🎭 **Real-time Bounding Boxes** – Draws rectangles around detected faces.
+
+---
+
+## 📸 How It Works
+1. **Start the IP Webcam App** on your Android device.
+2. Note the **IP Address & Port** shown (e.g., `http://192.168.1.100:8080`).
+3. Set the **WEB_CAM_URL** in your `.env` file.
+4. Run `main.py` – The script captures frames, detects faces, and sends alerts.
+5. If an **intruder is detected**, an image is:
+   - Saved temporarily (`face.jpg`).
+   - Uploaded to **Cloudinary**.
+   - Sent via **WhatsApp** with the image link.
+   - Deleted locally after sending.
+
+---
+
+## 📦 Installation & Setup
+
+### 🔧 Prerequisites
+- **Python 3.x** installed
+- An **Android phone** with [IP Webcam](https://play.google.com/store/apps/details?id=com.pas.webcam)
+- Accounts for:
+  - [Cloudinary](https://cloudinary.com/)
+  - [Twilio](https://www.twilio.com/)
+  - An **SMTP email provider** (e.g., Yahoo, Gmail)
+
+### 🛠️ Installation
+1. **Clone the repository**:
+   ```sh
+   git clone https://github.com/your-username/intruder-detection.git
+   cd intruder-detection

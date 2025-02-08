@@ -1,11 +1,11 @@
-import os
+import os, smtplib
 
-import smtplib
-import pywhatkit
 from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email import encoders
 
+from twilio.rest import Client
+from typing import Literal
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -31,7 +31,9 @@ def send_email(image):
             message.attach(part)
         
         #*Connect to the email server
-        with smtplib.SMTP_SSL(host="smtp.mail.yahoo.com", port=465) as server:
+        with smtplib.SMTP(host="smtp.mail.yahoo.com", port=587) as server:
+            server.set_debuglevel(1)
+            server.starttls()
             server.login(os.getenv("SENDER_EMAIL"), os.getenv("SENDER_PASSWORD"))
             server.sendmail(os.getenv("SENDER_EMAIL"), os.getenv("RECIPIENT_EMAIL"), message.as_string())
         
@@ -40,18 +42,50 @@ def send_email(image):
     except Exception as e:
         print(f"Error: {e}")
         return False
-    
+        
+def send_text_or_whatsapp_message(type: Literal["w", "t"] = "t", image_url: str | None = None):
+    """Send a text message or a WhatsApp message.
 
-def send_whatsapp_message(image="face.jpg"):
-    """Send a WhatsApp message with the image attached."""
+    ### Args:
+        type (Literal[t, w]): The type of message to send. 't' for text message and 'w' for WhatsApp message.
+        image_url (str): The URL of the image to send in the message.
+    """
+    client = Client(os.getenv("TWILIO_SID"), os.getenv("TWILIO_AUTH_TOKEN"))
     
-    try:
-        pywhatkit.sendwhats_image(receiver= os.getenv("RECIPIENT_PHONE_NUMBER"),
-                                  caption="Security Alert, Intruder Detected!",
-                                  img_path=os.path.abspath(image),
-                                  tab_close=True,
-                                  wait_time=15)
-        print("WhatsApp message sent successfully!")
-        return True
-    except Exception as e:
-        print(f"Error: {e}")
+    if type == "w":
+        
+        if not image_url:
+            #*Send a text message without an image if no image URL is provided
+            send_response = client.messages.create(
+                to=f"whatsapp:{os.getenv("RECIPIENT_NUMBER")}",
+                from_=os.getenv("TWILIO_WHATSAPP_NUMBER"),
+                body="Security Alert, Intruder Detected!",
+            )
+            
+            if send_response.sid:
+                return True
+            else:
+                return False
+
+        send_response = client.messages.create(
+            to=f"whatsapp:{os.getenv("RECIPIENT_NUMBER")}",
+            from_=os.getenv("TWILIO_WHATSAPP_NUMBER"),
+            body="Security Alert, Intruder Detected!",
+            media_url=[image_url]
+        )
+        
+        if send_response.sid:
+            return True
+        else:
+            return False
+    elif type == "t":
+        send_response = client.messages.create(
+            to=os.getenv("RECIPIENT_NUMBER"),
+            from_=os.getenv("TWILIO_PHONE_NUMBER"),
+            body="Security Alert, Intruder Detected!"
+        )
+        
+        if send_response.sid:        
+            return True
+        else:
+            return False
